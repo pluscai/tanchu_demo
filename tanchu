@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>弹出层</title>
+		<script src="js/jquery.min.js"></script>
+		<style>
+			/*upd_layer*/
+			.upd_layer{
+				position:fixed;
+				width:800px;
+				height:350px;
+				background-color:#fff;
+				left:50%;
+				top:50%;
+				margin-left:-400px;
+				display:none;
+				margin-top:-250px;
+				z-index:111;
+				overflow:auto;
+				padding-top:10px;
+			}
+			.upd_layer p{
+				margin-top:25px;
+				margin-left:100px;
+			}
+			.upd_layer .cancel,
+			.upd_layer .save{
+				margin-left:20px;
+				height:28px;
+				line-height: 28px;
+				padding:0 20px;
+				border-radius: 3px;
+				background-color:#ff9600;
+				color:#fff;
+			}
+			
+			.fill_box>div{
+				margin-top:10px;
+			}
+			.fill_box>div>span{
+				display: inline-block;
+				width:100px;
+				text-align: right;
+			}
+			.fill_box input{
+				width:250px;
+			}
+			.fill_box textarea{
+				vertical-align: top;
+				margin-left:25px;
+				border-color:#e7e7e7;
+				outline: none;
+			}
+			.mask{
+				width: 100%;
+			    height: 100%;
+			    background: rgba(0,0,0,0.5);
+			    position: fixed;
+			    z-index: 100;
+			    display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="mask"></div>
+		 <div class="address">
+              <h3>收货地址</h3>
+              <p>已保存了<span>4</span>条地址，还能保存<span>16</span>条地址</p>
+              <table cellpadding="0" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>收货人</th>
+                    <th>所在地区</th>
+                    <th>详细地址</th>
+                    <th>邮编</th>
+                    <th>电话/手机</th>
+                    <th>操作</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody class="address_tbody">
+                  <tr>
+                    <td>大张伟1</td>
+                    <td>江苏省 南京市 江宁区 东山街道</td>
+                    <td>将军大道120号翠屏山花园，55栋1120</td>
+                    <td>211100</td>
+                      <td>13222579856</td>
+                    <td><span class="upd_ads">修改</span> | <span class="del">删除</span></td>
+                    <td><span class="mor">默认地址</span></td>
+                  </tr>
+                  <tr>
+                    <td>大张伟2</td>
+                    <td>江苏省 南京市 江宁区 东山街道</td>
+                    <td>将军大道120号翠屏山花园，55栋1120</td>
+                    <td>211100</td>
+                    <td>13222579856</td>
+                    <td><span class="upd_ads">修改</span> | <span class="del">删除</span></td>
+                    <td style="padding-right:10px;"><span class="mor moren">设置默认</span></td>
+                  </tr>
+                  <tr>
+                    <td>大张伟3</td>
+                    <td>江苏省 南京市 江宁区 东山街道</td>
+                    <td>将军大道120号翠屏山花园，55栋1120</td>
+                    <td>211100</td>
+                    <td>13222579856</td>
+                    <td><span class="upd_ads">修改</span> | <span class="del">删除</span></td>
+                    <td style="padding-right:10px;"><span class="moren mor">设置默认</span></td>
+                  </tr>
+                </tbody>
+              </table>
+              
+           </div>
+		
+		
+		<div class="content">
+			内容区
+			<div class="upd_layer">	
+				<form action="" class="fill_box">
+					<div><span>收货人：</span><input type="text" /></div>
+					<div><span>所在地区：</span><input type="text" /></div>
+					<div><span>详细地址：</span><textarea name="" id="" cols="60" rows="5"></textarea></div>
+					<div><span>邮编：</span><input type="text" /></div>
+					<div><span>电话/手机：</span><input type="text" /></div>
+				</form>
+				<p>
+					<span class="cancel">取消</span>
+					<span class="save">保存修改</span>
+				</p>
+
+			</div>
+			
+		</div>
+		<script>
+			//点击出现弹出层
+			$(".upd_ads").on('click',function(){
+				$(".mask").show();
+				$(".upd_layer").show();
+				$("body").css("overflow","hidden");
+				//拿到需要修改的各个值并赋给弹出的修改框
+				var ads = {};
+				ads.name = $(this).parent().parent().children(":nth-child(1)").text();
+				ads.local = $(this).parent().parent().children(":nth-child(2)").text();
+				ads.detailAds = $(this).parent().parent().children(":nth-child(3)").text();
+				ads.postNum = $(this).parent().parent().children(":nth-child(4)").text();
+				ads.phoneNum = $(this).parent().parent().children(":nth-child(5)").text();
+				$(".fill_box>div:nth-child(1) input").val(ads.name);
+				$(".fill_box>div:nth-child(2) input").val(ads.local);
+				$(".fill_box>div:nth-child(3) textarea").val(ads.detailAds);
+				$(".fill_box>div:nth-child(4) input").val(ads.postNum);
+				$(".fill_box>div:nth-child(5) input").val(ads.phoneNum);
+				
+			});
+			$(".upd_layer .cancel").on('click',function(){
+				$(".mask").hide();
+				$(".upd_layer").hide();
+			});
+			//save
+			$(".upd_layer .save").on('click',function(){
+				$(".mask").hide();
+				$(".upd_layer").hide();
+				var updAds = {
+					"name":$(".fill_box>div:nth-child(1) input").val(),
+					"local":$(".fill_box>div:nth-child(2) input").val(),
+					"detailAds":$(".fill_box>div:nth-child(3) textarea").val(),
+					"postNum":$(".fill_box>div:nth-child(4) input").val(),
+					"phoneNum":$(".fill_box>div:nth-child(5) input").val()
+				};						
+			});
+			
+			//随时调整弹出层的位置
+			 function adjustTanchuPos() {
+			    $('.upd_layer').height($(window).height() * 0.5);
+			    $('.upd_layer').css('margin-top', $('.upd_layer').height() * -0.5);
+			 }
+			  adjustTanchuPos();
+			  $(window).resize(adjustTanchuPos);
+			
+			
+		</script>
+	</body>
+</html>
